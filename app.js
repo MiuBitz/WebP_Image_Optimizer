@@ -11,7 +11,7 @@ function qualityUI(reset=false){
   if(reset)$('quality').value=png?256:82;
   $('qualityLabel').innerHTML=(png?'PNG colors':'Quality')+' | <output id="qValue">'+$('quality').value+'</output>';
   $('qualityHint').textContent=png?'Fewer colors mean smaller files.':'Lower quality means smaller files.';
-  $('preset').textContent=({webp:'WebP',png:'PNG',jpeg:'JPEG'})[$('format').value]+' | Auto optimize';
+  $('preset').textContent=({webp:'WebP',png:'PNG',jpeg:'JPEG'})[$('format').value]+' | Auto';
 }
 $('format').onchange=()=>{qualityUI(true);settingsChanged();};
 $('quality').oninput=()=>{$('qValue').textContent=$('quality').value;};
@@ -129,7 +129,7 @@ window.addEventListener('drop',e=>{
   if(e.dataTransfer&&e.dataTransfer.files.length)return setFiles(e.dataTransfer.files);
 });
 $('apply').onclick=process;
-$('clear').onclick=()=>{if(busy)return;cleanup();selected=[];queued=[];$('files').value='';$('clear').hidden=true;$('apply').hidden=true;$('summary').textContent='Ready when you are. Drop images to get started.';};
+$('clear').onclick=()=>{if(busy)return;cleanup();selected=[];queued=[];$('files').value='';$('clear').hidden=true;$('apply').hidden=true;$('summary').textContent='';};
 $('zip').onclick=async()=>{
   if(zipBusy||busy||!results.length)return;
   if(typeof JSZip==='undefined'){$('summary').textContent='ZIP tools could not load. Connect to the internet and reload, or download images individually.';return;}
