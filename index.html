@@ -3,134 +3,51 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WebP Image Optimizer</title>
+<title>Image Studio - Optimize, Convert & Resize Images</title>
+<meta name="description" content="Drop your images and get optimized files instantly. Convert WebP, PNG and JPEG, resize, crop, set a target file size and rename batches. Images stay on your device.">
+<meta name="application-name" content="Image Studio">
+<meta name="theme-color" content="#171717">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Image Studio - Easy image tools">
+<meta property="og:description" content="Drop. Optimize. Download. Simple image conversion, resizing and batch exports, right on your device.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Image Studio">
+<meta name="twitter:description" content="Simple, private image optimization, conversion and resizing.">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
 <style>
-:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#171717;background:#f5f5f5}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;padding:40px 18px}
-.app{width:min(900px,100%);margin:auto;background:white;border:1px solid #ddd;border-radius:24px;padding:34px;box-shadow:0 12px 35px rgba(0,0,0,.06)}
-h1{font-size:30px;line-height:1.1;margin:0 0 8px}.intro{color:#6b6b6b;margin:0 0 26px}
-.drop{display:flex;min-height:210px;border:2px dashed #c7c7c7;border-radius:18px;align-items:center;justify-content:center;text-align:center;padding:30px;background:#fafafa;cursor:pointer;transition:.15s}
-.drop:hover,.drop.drag{border-color:#777;background:#f4f4f4}.drop strong{display:block;font-size:18px;margin-bottom:7px}.drop span{color:#777;font-size:14px}
-#files{display:none}
-.toolbar{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:end;margin-top:22px}
-.control label{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:9px}
-input[type=range]{width:100%;accent-color:#111}
-button{appearance:none;border:0;border-radius:12px;padding:13px 18px;background:#111;color:#fff;font-weight:700;cursor:pointer;white-space:nowrap}
-button.secondary{background:#ededed;color:#222}button:disabled{opacity:.35;cursor:not-allowed}
-.summary{margin-top:20px;padding:14px 16px;background:#f7f7f7;border-radius:12px;color:#555;font-size:14px}
-.results{display:grid;gap:10px;margin-top:16px}
-.item{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:16px;align-items:center;padding:14px 16px;border:1px solid #e8e8e8;border-radius:14px}
-.filename{font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sizes{color:#777;font-size:13px;margin-top:3px}
-.save{font-weight:750;font-size:13px}.good{color:#16723a}.bad{color:#a13c2a}
-.download-one{padding:9px 12px;font-size:12px}
-.footerActions{display:flex;justify-content:flex-end;margin-top:18px}
-#zipBtn{display:none}
-@media(max-width:650px){body{padding:15px}.app{padding:22px;border-radius:18px}.toolbar{grid-template-columns:1fr 1fr}.control{grid-column:1/-1}.item{grid-template-columns:1fr auto}.item button{grid-column:1/-1}.drop{min-height:170px}}
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#222222;background:#f5f5f5;font-synthesis:none}*{box-sizing:border-box}body{margin:0;padding:46px 20px}.app{max-width:960px;margin:auto}header{display:flex;align-items:center;gap:14px;margin-bottom:32px}header img{width:50px;height:50px}h1{font-size:26px;letter-spacing:-1px;margin:0}header p{color:#707070;font-size:13px;margin:4px 0 0}.badge{margin-left:auto;background:#eeeeee;padding:7px 12px;border-radius:20px;font-size:12px}.workspace{background:#fff;border:1px solid #dedede;border-radius:24px;padding:30px;box-shadow:0 8px 40px #00000006}h2{font-size:30px;letter-spacing:-1px;margin:0 0 8px}.intro{color:#707070;margin:0 0 26px;line-height:1.6}.drop{display:flex;min-height:240px;border:2px dashed #c8c8c8;border-radius:18px;align-items:center;justify-content:center;text-align:center;padding:25px;background:#fafafa;cursor:pointer;transition:.15s}.drop:hover,.drop.drag{background:#f0f0f0;border-color:#171717}.drop:focus-within{outline:3px solid #999999;outline-offset:3px}.drop strong{display:block;font-size:19px;margin:12px 0 8px}.drop span{display:block;color:#707070;font-size:13px;line-height:1.7}.upload{font-size:28px;color:#171717}.file-input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}.preset{display:flex;gap:10px;align-items:center;margin:18px 0;color:#707070;font-size:13px}.preset b{color:#171717;background:#eeeeee;padding:5px 9px;border-radius:6px}details{border-top:1px solid #e7e7e7;padding-top:18px}summary{cursor:pointer;font-weight:650;font-size:14px}summary span{font-weight:400;color:#707070;margin-left:8px}.settings{border:0;padding:22px 0 0;margin:0;min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.control label{display:block;font-size:13px;font-weight:650;margin-bottom:8px}.control input:not([type=range]),select{width:100%;font:inherit;font-size:14px;border:1px solid #d8d8d8;border-radius:9px;padding:11px;background:#fff;color:#222222}input[type=range]{width:100%;accent-color:#171717}.hint{font-size:12px;line-height:1.6;color:#707070;margin:8px 0 0}.wide{grid-column:1/-1}.pair{display:flex;gap:8px}.actions{display:flex;gap:10px;align-items:center;margin-top:22px}button{border:0;border-radius:10px;padding:12px 16px;background:#171717;color:white;font:inherit;font-size:13px;font-weight:650;cursor:pointer}button.secondary{background:#eeeeee;color:#333333}button:disabled{opacity:.5;cursor:not-allowed}.summary{margin-top:24px;font-size:13px;color:#707070;line-height:1.6}.results{display:grid;gap:10px;margin-top:14px}.item{display:grid;grid-template-columns:54px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px;border:1px solid #e2e2e2;border-radius:13px}.thumb{width:54px;height:54px;object-fit:contain;border-radius:7px;background:repeating-conic-gradient(#f1f1f1 0% 25%,white 0% 50%) 0/12px 12px}.filename{font-size:14px;font-weight:650;overflow-wrap:anywhere}.sizes{font-size:12px;color:#707070;margin-top:5px;line-height:1.6}.error{color:#333333}.good{color:#171717}.notice{font-size:12px;line-height:1.6;color:#555555;margin-top:5px}[hidden]{display:none!important}footer{text-align:center;color:#888888;font-size:12px;margin-top:22px}progress{width:100%;height:5px;accent-color:#171717;margin-top:15px}input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #999999;outline-offset:3px}@media(max-width:650px){body{padding:22px 14px}.workspace{padding:20px}h2{font-size:26px}.badge{display:none}.settings{grid-template-columns:1fr 1fr}.control:first-child{grid-column:1/-1}.drop{min-height:210px}.item{grid-template-columns:44px minmax(0,1fr)}.thumb{width:44px;height:44px}.item button{grid-column:2;justify-self:start}.actions{flex-wrap:wrap}summary span{display:block;margin:5px 0 0}}@media(max-width:380px){.settings{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <main class="app">
-  <h1>WebP Image Optimizer</h1>
-  <p class="intro">Convert PNG and JPEG images to smaller WebP files. Everything stays on your device.</p>
-
-  <label class="drop" id="drop">
-    <div><strong>Drop images here</strong><span>or click to choose PNG / JPG / JPEG files</span></div>
-    <input id="files" type="file" accept="image/png,image/jpeg" multiple>
-  </label>
-
-  <section class="toolbar">
-    <div class="control">
-      <label><span>WebP quality</span><span id="qValue">82</span></label>
-      <input id="quality" type="range" min="40" max="100" value="82">
-    </div>
-    <button id="convert" disabled>Convert to WebP</button>
-    <button id="clear" class="secondary" disabled>Clear</button>
-  </section>
-
-  <div class="summary" id="summary">No images selected.</div>
-  <div class="results" id="results"></div>
-  <div class="footerActions"><button id="zipBtn">Download All as ZIP</button></div>
+<header><img src="icon.svg" alt=""><div><h1>Image Studio</h1><p>A little less size. A lot more possibilities.</p></div><span class="badge">On-device processing</span></header>
+<section class="workspace" aria-label="Image tools">
+<h2>Drop it. Done.</h2><p class="intro">Your images, lighter and ready to go.<br>Drop one or a whole batch. We'll take it from here.</p>
+<label class="drop" id="drop"><div><div class="upload" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V3m-5 5 5-5 5 5M4 15v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></div><strong>Drop your images here</strong><span>drop anywhere on this page, or click to browse</span><span>PNG | JPEG | WebP | AVIF | GIF | BMP</span></div><input class="file-input" id="files" type="file" accept="image/png,image/jpeg,image/webp,image/avif,image/gif,image/bmp" multiple></label>
+<div class="preset"><b id="preset">WebP | Auto optimize</b><span>Original dimensions by default</span></div>
+<details id="options"><summary>Optional settings <span>Format, size, crop & names</span></summary>
+<fieldset class="settings" id="settings" aria-label="Export settings">
+<div class="control"><label for="format">Save as</label><select id="format"><option value="webp">WebP</option><option value="png">PNG</option><option value="jpeg">JPEG</option></select></div>
+<div class="control"><label for="quality" id="qualityLabel">Quality | <output id="qValue">82</output></label><input id="quality" type="range" min="10" max="100" value="82"><p class="hint" id="qualityHint">Lower quality means smaller files.</p></div>
+<div class="control"><label for="target">Target size (KB)</label><input id="target" type="number" min="1" max="100000" placeholder="No limit"><p class="hint">Tries quality first, then smaller dimensions.</p></div>
+<div class="control"><label for="width">Resize to fit (pixels)</label><div class="pair"><input id="width" type="number" min="1" max="16384" placeholder="Width" aria-label="Maximum width"><input id="height" type="number" min="1" max="16384" placeholder="Height" aria-label="Maximum height"></div><p class="hint">Keeps proportions. Never enlarges.</p></div>
+<div class="control"><label for="crop">Crop</label><select id="crop"><option value="none">No crop</option><option value="1">Square | 1:1</option><option value="1.333333333333">Landscape | 4:3</option><option value="1.777777777778">Widescreen | 16:9</option><option value="0.8">Portrait | 4:5</option><option value="0.5625">Story | 9:16</option></select><p class="hint">Crops from the center before resizing.</p></div>
+<div class="control"><label for="background">JPEG background</label><input id="background" type="color" value="#ffffff"><p class="hint">Fills transparent areas for JPEG output.</p></div>
+<div class="control"><label for="rename">Export name</label><input id="rename" type="text" maxlength="100" placeholder="Keep original name"><p class="hint">Custom names get numbered: photo-001.</p></div>
+<div class="control"><label for="suffix">Add a suffix</label><input id="suffix" type="text" maxlength="60" placeholder="e.g. -optimized"></div>
+<div class="control"><label>&nbsp;</label><button id="reset" type="button" class="secondary">Reset settings</button></div>
+<p class="hint wide">GIF and other animated images export as a still image. Input format support depends on your browser. PNG color reduction may change appearance. Images stay on this device.</p>
+</fieldset>
+</details>
+<div class="actions"><button id="apply" hidden>Apply settings</button><button id="zip" hidden>Download all as ZIP</button><button id="clear" class="secondary" hidden>Clear</button></div>
+<progress id="progress" value="0" max="1" hidden aria-label="Images processed"></progress>
+<div class="summary" id="summary" role="status" aria-live="polite">Ready when you are. Drop images to get started.</div>
+<div class="results" id="results"></div>
+</section><footer>Image Studio | Made for the everyday image.</footer>
 </main>
-
+<script src="https://cdn.jsdelivr.net/npm/pako@1.0.11/dist/pako.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/upng-js@2.1.0/UPNG.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-<script>
-const $=id=>document.getElementById(id);
-const fileInput=$('files'),drop=$('drop'),quality=$('quality'),qValue=$('qValue');
-const convertBtn=$('convert'),clearBtn=$('clear'),resultsEl=$('results'),summary=$('summary'),zipBtn=$('zipBtn');
-let selected=[],results=[];
-
-const fmt=n=>n>=1048576?(n/1048576).toFixed(2)+' MB':n>=1024?Math.round(n/1024)+' KB':n+' B';
-const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-quality.oninput=()=>qValue.textContent=quality.value;
-
-function cleanup(){results.forEach(r=>URL.revokeObjectURL(r.url));results=[];zipBtn.style.display='none'}
-function setFiles(fs){
-  cleanup(); selected=[...fs].filter(f=>f.type==='image/png'||f.type==='image/jpeg'); renderReady();
-}
-function renderReady(){
-  resultsEl.innerHTML='';
-  let total=selected.reduce((a,f)=>a+f.size,0);
-  summary.textContent=selected.length?`${selected.length} image${selected.length===1?'':'s'} selected • ${fmt(total)} total`:'No images selected.';
-  selected.forEach(f=>{
-    let d=document.createElement('div');d.className='item';
-    d.innerHTML=`<div><div class="filename">${esc(f.name)}</div><div class="sizes">${fmt(f.size)}</div></div><span class="save">Ready</span><span></span>`;
-    resultsEl.appendChild(d);
-  });
-  convertBtn.disabled=!selected.length;clearBtn.disabled=!selected.length;
-}
-fileInput.onchange=e=>setFiles(e.target.files);
-['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));
-['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
-drop.addEventListener('drop',e=>setFiles(e.dataTransfer.files));
-clearBtn.onclick=()=>{cleanup();selected=[];fileInput.value='';renderReady()};
-
-async function webp(file,q){
-  const bitmap=await createImageBitmap(file);
-  const canvas=document.createElement('canvas');canvas.width=bitmap.width;canvas.height=bitmap.height;
-  canvas.getContext('2d').drawImage(bitmap,0,0);bitmap.close();
-  return await new Promise((res,rej)=>canvas.toBlob(b=>b?res(b):rej(new Error('WebP encoding failed')),'image/webp',q));
-}
-function download(blob,name){
-  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;
-  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-
-convertBtn.onclick=async()=>{
-  cleanup();resultsEl.innerHTML='';convertBtn.disabled=true;clearBtn.disabled=true;convertBtn.textContent='Converting…';
-  let oldTotal=0,newTotal=0;
-  for(const f of selected){
-    oldTotal+=f.size;
-    let row=document.createElement('div');row.className='item';
-    row.innerHTML=`<div><div class="filename">${esc(f.name)}</div><div class="sizes">${fmt(f.size)}</div></div><span class="save">Converting…</span><span></span>`;
-    resultsEl.appendChild(row);
-    try{
-      const blob=await webp(f,+quality.value/100),name=f.name.replace(/\.[^.]+$/,'')+'.webp',url=URL.createObjectURL(blob);
-      newTotal+=blob.size;results.push({blob,name,url});
-      const p=Math.round((1-blob.size/f.size)*100),good=p>=0;
-      row.innerHTML=`<div><div class="filename">${esc(f.name)}</div><div class="sizes">${fmt(f.size)} → ${fmt(blob.size)}</div></div>
-      <span class="save ${good?'good':'bad'}">${good?p+'% smaller':Math.abs(p)+'% larger'}</span>
-      <button class="download-one">Download</button>`;
-      row.querySelector('button').onclick=()=>download(blob,name);
-    }catch(e){row.innerHTML=`<div class="filename">${esc(f.name)}</div><span class="save bad">Failed</span><span></span>`}
-  }
-  const saved=oldTotal-newTotal,p=oldTotal?Math.round(saved/oldTotal*100):0;
-  summary.textContent=`Finished • ${fmt(oldTotal)} → ${fmt(newTotal)} • ${p>=0?p+'% smaller':Math.abs(p)+'% larger'}`;
-  if(results.length){zipBtn.style.display='inline-block'}
-  convertBtn.textContent='Convert Again';convertBtn.disabled=false;clearBtn.disabled=false;
-};
-
-zipBtn.onclick=async()=>{
-  if(!results.length)return;
-  if(typeof JSZip==='undefined'){alert('ZIP library could not load. Internet access is needed once when opening this version.');return}
-  zipBtn.disabled=true;zipBtn.textContent='Creating ZIP…';
-  const zip=new JSZip();
-  results.forEach(r=>zip.file(r.name,r.blob));
-  const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE'});
-  download(blob,'optimized-webp-images.zip');
-  zipBtn.textContent='Download All as ZIP';zipBtn.disabled=false;
-};
-renderReady();
-</script>
+<script src="app.js"></script>
 </body>
 </html>
